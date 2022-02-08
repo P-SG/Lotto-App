@@ -3,6 +3,9 @@ package com.psg.lottoapp
 import android.app.Application
 import android.content.Context
 import com.google.gson.Gson
+import com.psg.lottoapp.data.di.appModule
+import com.psg.lottoapp.data.di.repositoryModule
+import com.psg.lottoapp.data.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -25,7 +28,7 @@ class LottoApp: Application() {
         startKoin {
             androidLogger(Level.NONE)
             androidContext(this@LottoApp)
-            modules()
+            modules(listOf(appModule, viewModelModule, repositoryModule))
         }
     }
 
