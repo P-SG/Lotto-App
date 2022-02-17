@@ -27,6 +27,8 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+        binding.lifecycleOwner = this
+
 
     }
 
@@ -87,6 +89,11 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
             startActivity(intent)
         }
 
+        binding.btnGenerateNum.setOnClickListener {
+            val intent = Intent(this,GeneNumActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun parseColor(num: Int) = when(num){
@@ -98,7 +105,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
         else -> R.color.black
     }
 
-    private val textWatcher = object : TextWatcher {
+    private val textWatcher = object : TextWatcher{
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
 
@@ -106,7 +113,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
         }
 
         override fun afterTextChanged(s: Editable?) {
-            if (s!!.length > 1) {
+            if (s!!.length > 1){
                 viewModel.searchLotto(s.toString().toInt())
             }
         }

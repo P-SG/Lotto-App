@@ -61,6 +61,7 @@ dependencies {
 
     // qr코드 스캔
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
+    implementation 'com.google.zxing:core:3.3.3'
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     // koin

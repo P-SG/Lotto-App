@@ -19,14 +19,7 @@ data class LottoNum(
     val drwNo: Int
 ) {
 
-    fun backColor1() = numColor(drwtNo1)
-    fun backColor2() = numColor(drwtNo2)
-    fun backColor3() = numColor(drwtNo3)
-    fun backColor4() = numColor(drwtNo4)
-    fun backColor5() = numColor(drwtNo5)
-    fun backColor6() = numColor(drwtNo6)
-
-    private fun numColor(num:Int) =
+     fun numColor(num:Int) =
         when(num){
             in 0..10 -> R.color.num1
             in 11..20 -> R.color.num2

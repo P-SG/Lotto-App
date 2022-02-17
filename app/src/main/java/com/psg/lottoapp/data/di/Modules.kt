@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
     val viewModelModule = module {
         viewModel { MainViewModel(get()) }
-        viewModel { GeneNumViewModel(get()) }
+        viewModel { GeneNumViewModel() }
         viewModel { QRScanViewModel(get()) }
         viewModel { SplashViewModel(get()) }
     }
