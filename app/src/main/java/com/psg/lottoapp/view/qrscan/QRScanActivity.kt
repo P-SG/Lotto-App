@@ -28,7 +28,7 @@ class QRScanActivity : BaseActivity<ActivityQrscanBinding,QRScanViewModel>(R.lay
     private fun initQRcodeScanner(){
         val integrator = IntentIntegrator(this)
         integrator.setBeepEnabled(false)
-//        integrator.setOrientationLocked(true)
+        integrator.setOrientationLocked(false)
         integrator.setBarcodeImageEnabled(true)
 //        integrator.captureActivity = QRScanActivity::class.java
         integrator.setPrompt("QR코드를 스캔해주세요.")
