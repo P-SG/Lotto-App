@@ -1,45 +1,84 @@
 package com.psg.lottoapp.data.di
 
+import android.content.Context
 import androidx.room.Room
 import com.psg.lottoapp.data.api.LottoAPI
 import com.psg.lottoapp.data.db.AppDatabase
+import com.psg.lottoapp.data.db.dao.LottoDao
 import com.psg.lottoapp.data.repository.AppRepository
-import com.psg.lottoapp.view.generate.GeneNumViewModel
-import com.psg.lottoapp.view.main.MainViewModel
-import com.psg.lottoapp.view.qrscan.QRScanViewModel
-import com.psg.lottoapp.view.splash.SplashViewModel
-import get
-import org.koin.android.ext.koin.androidApplication
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
-    val appModule = module {
-        single {
-            Retrofit.Builder()
-                .baseUrl("https://www.dhlottery.co.kr")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(LottoAPI::class.java)
-        }
-        single {
-            Room.databaseBuilder(
-                androidApplication(),
-                AppDatabase::class.java,
-                "lotto-app.db")
-                .build()
-        }
-        single { get<AppDatabase>().LottoDao() }
+
+@Module
+@InstallIn(SingletonComponent::class)
+object Modules {
+    @Provides
+    @Singleton
+    fun provideApiService(
+    ): LottoAPI {
+        return Retrofit.Builder()
+            .baseUrl("https://www.dhlottery.co.kr")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(LottoAPI::class.java)
     }
 
-    val viewModelModule = module {
-        viewModel { MainViewModel(get()) }
-        viewModel { GeneNumViewModel() }
-        viewModel { QRScanViewModel(get()) }
-        viewModel { SplashViewModel(get()) }
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "lotto-app.db"
+        )
+            .build()
     }
 
-    val repositoryModule = module {
-        single { AppRepository(get(),get()) }
+    @Provides
+    @Singleton
+    fun provideLottoDao(database: AppDatabase): LottoDao {
+        return database.LottoDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideRepository(dao: LottoDao, api: LottoAPI): AppRepository {
+        return AppRepository(dao, api)
+    }
+}
+
+//    val appModule = module {
+//        single {
+//            Retrofit.Builder()
+//                .baseUrl("https://www.dhlottery.co.kr")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//                .create(LottoAPI::class.java)
+//        }
+//        single {
+//            Room.databaseBuilder(
+//                androidApplication(),
+//                AppDatabase::class.java,
+//                "lotto-app.db")
+//                .build()
+//        }
+//        single { get<AppDatabase>().LottoDao() }
+//    }
+//
+//    val viewModelModule = module {
+//        viewModel { MainViewModel(get()) }
+//        viewModel { GeneNumViewModel() }
+//        viewModel { QRScanViewModel(get()) }
+//        viewModel { SplashViewModel(get()) }
+//    }
+//
+//    val repositoryModule = module {
+//        single { AppRepository(get(),get()) }
+//    }
