@@ -3,12 +3,16 @@ package com.psg.lottoapp.data.repository
 import com.psg.lottoapp.data.api.LottoAPI
 import com.psg.lottoapp.data.db.dao.LottoDao
 import com.psg.lottoapp.data.model.LottoEntity
-import com.psg.lottoapp.data.model.LottoNum
+import com.psg.lottoapp.data.model.LottoResponse
 import retrofit2.Response
+import javax.inject.Inject
 
-class AppRepository constructor(private val dao: LottoDao, private val api: LottoAPI) {
+class AppRepository @Inject constructor(
+    private val dao: LottoDao,
+    private val api: LottoAPI
+    ) {
 
-    suspend fun searchLotto(drwNo: Int): Response<LottoNum> = api.getLottoNum(drwNo)
+    suspend fun searchLotto(drwNo: Int): Response<LottoResponse> = api.getLottoNum(drwNo)
 
     // Room
     fun getLottoNum() = dao.getLotto()
