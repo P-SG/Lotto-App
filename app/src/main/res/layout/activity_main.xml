@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.psg.lottoapp.data.model.LottoNum" />
+            type="com.psg.lottoapp.data.model.Lotto" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
-            android:text="1"
+            android:text="@{item.getNum(item.drwtNo1)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold"/>
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
             android:layout_marginStart="7dp"
-            android:text="2"
+            android:text="@{item.getNum(item.drwtNo2)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold" />
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
             android:layout_marginStart="7dp"
-            android:text="3"
+            android:text="@{item.getNum(item.drwtNo3)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold" />
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
             android:layout_marginStart="7dp"
-            android:text="4"
+            android:text="@{item.getNum(item.drwtNo4)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold" />
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
             android:layout_marginStart="7dp"
-            android:text="5"
+            android:text="@{item.getNum(item.drwtNo5)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold" />
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
             android:layout_marginStart="7dp"
-            android:text="6"
+            android:text="@{item.getNum(item.drwtNo6)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold" />
@@ -155,7 +155,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/circle"
             android:layout_marginStart="3dp"
-            android:text="1"
+            android:text="@{item.getNum(item.bnusNo)}"
             android:textColor="@color/white"
             android:gravity="center"
             android:textStyle="bold"
