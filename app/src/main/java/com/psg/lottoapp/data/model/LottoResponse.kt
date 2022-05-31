@@ -2,7 +2,7 @@ package com.psg.lottoapp.data.model
 
 import com.psg.lottoapp.R
 
-data class LottoNum(
+data class LottoResponse(
     val returnValue: String, // 요청결과
     val drwNoDate: String, // 날짜
     val totSellamnt: Long, // 총상금
