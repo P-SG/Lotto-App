@@ -2,23 +2,21 @@ package com.psg.lottoapp.view.qrscan
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.psg.lottoapp.R
 import com.psg.lottoapp.databinding.ActivityQrscanBinding
 import com.psg.lottoapp.view.base.BaseActivity
-import com.psg.lottoapp.view.generate.GeneNumActivity
-import com.psg.lottoapp.view.generate.GeneNumViewModel
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class QRScanActivity : BaseActivity<ActivityQrscanBinding,QRScanViewModel>(R.layout.activity_qrscan) {
     override val TAG: String = QRScanActivity::class.java.simpleName
-    override val viewModel: QRScanViewModel by inject()
+    override val viewModel: QRScanViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
