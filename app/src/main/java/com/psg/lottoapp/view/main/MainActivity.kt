@@ -30,7 +30,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
 
     private fun checkOverTime(num: Int){
         val b = intent.getBooleanExtra("overTime",false)
-        println("b체크 $b")
+        AppLogger.println("b체크 $b")
         if (b) viewModel.searchLotto(num+1) else viewModel.searchLotto(num)
     }
 
@@ -65,16 +65,16 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
                     }
                 }
             } else { // DB에 저장된 로또회차가 없을 때
-                AppLogger.p("로또번호가 null")
+                AppLogger.println("로또번호가 null")
                 binding.etLottoNum.setText("1001")
                 binding.tvLottoNum.text = "회차 당첨번호 2022.02.05"
                 viewModel.searchLotto(1001)
                 viewModel.lottoNum.observe(this) { num ->
                     if (num != null) { // 검색한 로또회차가 있을 때
-                        println("INSERT 호출")
+                        AppLogger.println("INSERT 호출")
                         viewModel.insertLotto(LottoEntity(num.drwNo, num.drwNoDate))
                     } else { // 검색한 로또회차가 없을 때
-                        println("api가 null")
+                        AppLogger.println("api가 null")
                     }
                 }
             }

@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import com.psg.lottoapp.R
 import com.psg.lottoapp.data.model.LottoEntity
 import com.psg.lottoapp.databinding.ActivitySplashBinding
+import com.psg.lottoapp.util.AppLogger
 import com.psg.lottoapp.view.base.BaseActivity
 import com.psg.lottoapp.view.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,10 +33,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding,SplashViewModel>(R.lay
                 val date = sf.parse("${it.drwNoDate} 00:00:00")
                 val today = Calendar.getInstance()
                 val calDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-                println("저장된 회차:${it.drwNo}")
+                AppLogger.println("저장된 회차:${it.drwNo}")
                 if (calDate > 7) {
-                    println("최신회차가 아님")
-                    println("날짜차이:${(calDate / 7)}주지남}")
+                    AppLogger.println("최신회차가 아님")
+                    AppLogger.println("날짜차이:${(calDate / 7)}주지남}")
                     viewModel.searchLotto((it.drwNo + (calDate / 7).toInt()))
                     viewModel.lottoNum.observe(this) { num ->
                         if (num != null) {
@@ -47,18 +48,18 @@ class SplashActivity : BaseActivity<ActivitySplashBinding,SplashViewModel>(R.lay
                     }
 
                 } else {
-                    println("최신회차")
+                    AppLogger.println("최신회차")
                     startActivity(intent)
                     finish()
                 }
             } else {
-                println("앱이 처음 실행")
-                println("저장된 회차가 없음")
+                AppLogger.println("앱이 처음 실행")
+                AppLogger.println("저장된 회차가 없음")
                 val sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
                 val date = sf.parse("2022-01-29 00:00:00")
                 val today = Calendar.getInstance()
                 val calDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-                println("날짜차이:${(calDate / 7)}주지남")
+                AppLogger.println("날짜차이:${(calDate / 7)}주지남")
 
                 viewModel.searchLotto(1000 + (calDate / 7).toInt())
                 viewModel.lottoNum.observe(this) { num ->

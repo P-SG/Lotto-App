@@ -7,6 +7,7 @@ import com.psg.lottoapp.data.model.Lotto
 import com.psg.lottoapp.data.model.LottoEntity
 import com.psg.lottoapp.data.model.LottoResponse
 import com.psg.lottoapp.data.repository.AppRepository
+import com.psg.lottoapp.util.AppLogger
 import com.psg.lottoapp.util.responseToLotto
 import com.psg.lottoapp.view.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +35,7 @@ class SplashViewModel @Inject constructor(private val repository: AppRepository)
                 val code = repository.searchLotto(drwNo).code()
 
                 if (code == 200 && body != null){
-                    println("바디는?$body")
+                    AppLogger.println("바디는?$body")
                     res = body
                 }
             }

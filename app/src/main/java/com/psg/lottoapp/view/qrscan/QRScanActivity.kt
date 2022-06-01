@@ -10,6 +10,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.psg.lottoapp.R
 import com.psg.lottoapp.databinding.ActivityQrscanBinding
+import com.psg.lottoapp.util.AppLogger
 import com.psg.lottoapp.view.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +41,7 @@ class QRScanActivity : BaseActivity<ActivityQrscanBinding,QRScanViewModel>(R.lay
             Toast.makeText(this,"QR코드 인증이 취소되었습니다.",Toast.LENGTH_SHORT).show()
             finish()
         }else {
-            println("결과는?:${result.contents}")
+            AppLogger.println("결과는?:${result.contents}")
             val url = result.contents
             loadWebView(url)
         }
