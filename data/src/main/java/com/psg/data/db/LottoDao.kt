@@ -1,16 +1,15 @@
-package com.psg.lottoapp.data.db.dao
+package com.psg.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.psg.lottoapp.data.model.LottoEntity
+import com.psg.data.model.local.LottoEntity
 
 @Dao
 interface LottoDao {
     @Query("SELECT * FROM LottoEntity")
-    fun getLotto(): LiveData<LottoEntity>
+    fun getLotto(): LottoEntity
 
     @Insert
     suspend fun insertLotto(lottoEntity: LottoEntity)

@@ -1,4 +1,4 @@
-package com.psg.lottoapp.data.model
+package com.psg.data.model.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

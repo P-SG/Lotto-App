@@ -1,9 +1,8 @@
-package com.psg.lottoapp.data.db
+package com.psg.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.psg.lottoapp.data.db.dao.LottoDao
-import com.psg.lottoapp.data.model.LottoEntity
+import com.psg.data.model.local.LottoEntity
 
 @Database(entities = [LottoEntity::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
