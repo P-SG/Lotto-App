@@ -1,2 +1,4 @@
 rootProject.name = "Lotto App"
 include ':app'
+include ':data'
+include ':domain'
