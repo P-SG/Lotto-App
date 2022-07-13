@@ -1,6 +1,5 @@
-package com.psg.lottoapp.data.model
+package com.psg.domain.model
 
-import com.psg.lottoapp.R
 
 data class Lotto(
     val drwNoDate: String,
@@ -13,10 +12,6 @@ data class Lotto(
     val bnusNo: Int,
     val drwNo: Int
 ){
-
-
-
-
 
     fun getNum(num:Int) = num.toString()
 }
