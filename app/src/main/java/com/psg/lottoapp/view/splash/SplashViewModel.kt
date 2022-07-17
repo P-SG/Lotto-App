@@ -3,44 +3,59 @@ package com.psg.lottoapp.view.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.psg.lottoapp.data.model.Lotto
-import com.psg.lottoapp.data.model.LottoEntity
-import com.psg.lottoapp.data.model.LottoResponse
-import com.psg.lottoapp.data.repository.AppRepository
-import com.psg.lottoapp.util.AppLogger
-import com.psg.lottoapp.util.responseToLotto
+import com.psg.domain.model.Lotto
+import com.psg.domain.model.LottoDate
+import com.psg.domain.usecase.DeleteLottoUseCase
+import com.psg.domain.usecase.GetLocalLottoUseCase
+import com.psg.domain.usecase.GetRemoteLottoUseCase
+import com.psg.domain.usecase.InsertLottoUseCase
 import com.psg.lottoapp.view.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(private val repository: AppRepository): BaseViewModel() {
-    val lottoEntity: LiveData<LottoEntity> get() = repository.getLottoNum()
-    val lottoNum: LiveData<Lotto> get() = _lottoNum
-    private var _lottoNum = MutableLiveData<Lotto>()
+class SplashViewModel @Inject constructor(
+    private val getRemoteLottoUseCase: GetRemoteLottoUseCase,
+    private val getLocalLottoUseCase: GetLocalLottoUseCase,
+    private val insertLottoUseCase: InsertLottoUseCase,
+    private val deleteLottoUseCase: DeleteLottoUseCase
+    ): BaseViewModel() {
+    val lottoDate: LiveData<LottoDate?> get() = _lottoDate
+    private val _lottoDate = MutableLiveData<LottoDate?>()
+    val lottoNum: LiveData<Lotto?> get() = _lottoNum
+    private var _lottoNum = MutableLiveData<Lotto?>()
 
-    fun updateLotto(lottoEntity: LottoEntity) = CoroutineScope(Dispatchers.IO).launch { repository.updateLotto(lottoEntity) }
-    fun insertLotto(lottoEntity: LottoEntity) = CoroutineScope(Dispatchers.IO).launch { repository.insertLotto(lottoEntity) }
-    fun deleteLotto() = CoroutineScope(Dispatchers.IO).launch { repository.deleteLotto() }
+//    fun updateLotto(lottoEntity: com.psg.data.model.local.LottoEntity) = CoroutineScope(Dispatchers.IO).launch { repository.updateLotto(lottoEntity) }
+    fun insertLotto(lottoDate: LottoDate) = CoroutineScope(Dispatchers.IO).launch { insertLottoUseCase(lottoDate) }
+    fun deleteLotto() = CoroutineScope(Dispatchers.IO).launch { deleteLottoUseCase() }
 
-    fun searchLotto(drwNo:Int){
-        var res = LottoResponse("","",0,0,0,0,0,0,0,0,0,0,0,0)
+    fun getRemoteLotto(drwNo:Int){
+        var lotto: Lotto? = null
         viewModelScope.launch {
             withContext(Dispatchers.Default){
-                val body = repository.searchLotto(drwNo).body()
-                val code = repository.searchLotto(drwNo).code()
-
-                if (code == 200 && body != null){
-                    AppLogger.println("바디는?$body")
-                    res = body
+                getRemoteLottoUseCase(drwNo).collect {
+                    lotto = it
                 }
             }
-            _lottoNum.value = responseToLotto(res)
+            _lottoNum.value = lotto
 
+        }
+    }
+
+    fun getLocalLotto(){
+        var lottoDate: LottoDate? = null
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                getLocalLottoUseCase().collect {
+                    lottoDate = it
+                }
+            }
+            _lottoDate.value = lottoDate
         }
     }
 

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.psg.lottoapp.R
-import com.psg.lottoapp.data.model.LottoEntity
+import com.psg.domain.model.LottoDate
 import com.psg.lottoapp.databinding.ActivitySplashBinding
 import com.psg.lottoapp.util.AppLogger
 import com.psg.lottoapp.view.base.BaseActivity
@@ -24,10 +24,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding,SplashViewModel>(R.lay
     }
 
     private fun checkNewDrwNo(){
+        viewModel.getLocalLotto()
         val intent = Intent(this,MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
-        viewModel.lottoEntity.observe(this) {
+        viewModel.lottoDate.observe(this) {
             if (it != null) {
                 val sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
                 val date = sf.parse("${it.drwNoDate} 00:00:00")
@@ -37,11 +38,16 @@ class SplashActivity : BaseActivity<ActivitySplashBinding,SplashViewModel>(R.lay
                 if (calDate > 7) {
                     AppLogger.println("최신회차가 아님")
                     AppLogger.println("날짜차이:${(calDate / 7)}주지남}")
-                    viewModel.searchLotto((it.drwNo + (calDate / 7).toInt()))
+                    viewModel.getRemoteLotto((it.drwNo + (calDate / 7).toInt()))
                     viewModel.lottoNum.observe(this) { num ->
                         if (num != null) {
                             viewModel.deleteLotto()
-                            viewModel.insertLotto(LottoEntity(num.drwNo, num.drwNoDate))
+                            viewModel.insertLotto(
+                                LottoDate(
+                                    num.drwNo,
+                                    num.drwNoDate
+                                )
+                            )
                             startActivity(intent)
                             finish()
                         }
@@ -61,10 +67,15 @@ class SplashActivity : BaseActivity<ActivitySplashBinding,SplashViewModel>(R.lay
                 val calDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
                 AppLogger.println("날짜차이:${(calDate / 7)}주지남")
 
-                viewModel.searchLotto(1000 + (calDate / 7).toInt())
+                viewModel.getRemoteLotto(1000 + (calDate / 7).toInt())
                 viewModel.lottoNum.observe(this) { num ->
                     if (num != null) {
-                        viewModel.insertLotto(LottoEntity(num.drwNo, num.drwNoDate))
+                        viewModel.insertLotto(
+                            LottoDate(
+                                num.drwNo,
+                                num.drwNoDate
+                            )
+                        )
                         startActivity(intent)
                         finish()
                     }

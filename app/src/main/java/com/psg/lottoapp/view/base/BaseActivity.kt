@@ -35,7 +35,6 @@ abstract class BaseActivity<T: ViewDataBinding, V: BaseViewModel>(@LayoutRes val
     override fun onStop() {
         super.onStop()
         AppLogger.i(TAG,"onStop")
-//        Log.i(TAG,"onStop")
     }
 
     override fun onDestroy() {
