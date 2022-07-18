@@ -2,13 +2,13 @@ package com.psg.lottoapp.view.main
 
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color.parseColor
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.activity.viewModels
 import com.psg.lottoapp.R
-import com.psg.lottoapp.data.model.LottoEntity
+import com.psg.data.model.local.LottoEntity
+import com.psg.domain.model.LottoDate
 import com.psg.lottoapp.databinding.ActivityMainBinding
 import com.psg.lottoapp.util.AppLogger
 import com.psg.lottoapp.view.base.BaseActivity
@@ -31,18 +31,19 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
     private fun checkOverTime(num: Int){
         val b = intent.getBooleanExtra("overTime",false)
         AppLogger.println("b체크 $b")
-        if (b) viewModel.searchLotto(num+1) else viewModel.searchLotto(num)
+        if (b) viewModel.getRemoteLotto(num+1) else viewModel.getRemoteLotto(num)
     }
 
     private fun initView(){
+        viewModel.getLocalLotto()
 
         binding.etLottoNum.addTextChangedListener(textWatcher)
 
-        viewModel.lottoEntity.observe(this) {
+        viewModel.lottoDate.observe(this) {
             if (it != null) { // DB에 저장된 로또회차가 있을 때
                 binding.etLottoNum.setText(it.drwNo.toString())
                 binding.tvLottoNum.text = "회차 당첨번호 ${it.drwNoDate.replace("-", ".")}"
-                viewModel.searchLotto(it.drwNo)
+                viewModel.getRemoteLotto(it.drwNo)
 //                checkOverTime(it.drwNo)
                 viewModel.lottoNum.observe(this) { num ->
                     if (num != null) {
@@ -68,11 +69,16 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
                 AppLogger.println("로또번호가 null")
                 binding.etLottoNum.setText("1001")
                 binding.tvLottoNum.text = "회차 당첨번호 2022.02.05"
-                viewModel.searchLotto(1001)
+                viewModel.getRemoteLotto(1001)
                 viewModel.lottoNum.observe(this) { num ->
                     if (num != null) { // 검색한 로또회차가 있을 때
                         AppLogger.println("INSERT 호출")
-                        viewModel.insertLotto(LottoEntity(num.drwNo, num.drwNoDate))
+                        viewModel.insertLotto(
+                            LottoDate(
+                                num.drwNo,
+                                num.drwNoDate
+                            )
+                        )
                     } else { // 검색한 로또회차가 없을 때
                         AppLogger.println("api가 null")
                     }
@@ -103,7 +109,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
 
         override fun afterTextChanged(s: Editable?) {
             if (s!!.length > 1){
-                viewModel.searchLotto(s.toString().toInt())
+                viewModel.getRemoteLotto(s.toString().toInt())
             }
         }
 

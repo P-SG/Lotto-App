@@ -3,7 +3,6 @@ package com.psg.lottoapp.view.generate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.psg.lottoapp.R
-import com.psg.lottoapp.data.repository.AppRepository
 import com.psg.lottoapp.util.AppLogger
 import com.psg.lottoapp.view.base.BaseViewModel
 import kotlin.random.Random
