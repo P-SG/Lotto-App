@@ -1,23 +1,22 @@
-package com.psg.lottoapp.view.generate
+package com.psg.lottoapp.ui.generate
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.psg.lottoapp.R
-import com.psg.lottoapp.util.AppLogger
-import com.psg.lottoapp.view.base.BaseViewModel
+import com.psg.lottoapp.ui.base.BaseViewModel
+import timber.log.Timber
 import kotlin.random.Random
 
-class GeneNumViewModel() : BaseViewModel() {
+class GenerateNumViewModel() : BaseViewModel() {
     val lottoNum: LiveData<Map<Int,Int>> get() = _lottoNum
     private var _lottoNum = MutableLiveData<Map<Int,Int>>()
-
 
     init {
         geneLottoNum()
     }
 
     fun geneLottoNum(){
-        AppLogger.println("vm.setvalue")
+        Timber.d("vm.setvalue")
         _lottoNum.value = generateLotto()
     }
 

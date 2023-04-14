@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
 
-    suspend fun getRemoteLotto(drwNum:Int):Flow<Lotto>
-    suspend fun getLocalLotto():Flow<LottoDate>
-    suspend fun insertLotto(lotto: LottoDate)
-    suspend fun updateLotto(lotto: LottoDate)
-    suspend fun deleteLotto()
+    fun getRemoteLotto(drwNum:Int): Flow<Result<Lotto>>
+    fun getLocalLotto(): Flow<Result<LottoDate>>
+    fun insertLotto(lotto: LottoDate): Flow<Result<Unit>>
+    fun updateLotto(lotto: LottoDate): Flow<Result<Unit>>
+    fun deleteLotto(): Flow<Result<Unit>>
 }

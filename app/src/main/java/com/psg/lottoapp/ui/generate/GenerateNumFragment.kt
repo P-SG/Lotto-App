@@ -1,17 +1,23 @@
-package com.psg.lottoapp.view.generate
+package com.psg.lottoapp.ui.generate
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import com.psg.lottoapp.R
 import com.psg.lottoapp.databinding.ActivityGeneNumBinding
-import com.psg.lottoapp.view.base.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
+import com.psg.lottoapp.databinding.FragmentGenerateNumBinding
+import com.psg.lottoapp.ui.base.BaseFragment
 
-@AndroidEntryPoint
-class GeneNumActivity : BaseActivity<ActivityGeneNumBinding,GeneNumViewModel>(R.layout.activity_gene_num) {
-    override val TAG: String = GeneNumActivity::class.java.simpleName
-    override val viewModel: GeneNumViewModel by viewModels()
+class GenerateNumFragment : BaseFragment<FragmentGenerateNumBinding, GenerateNumViewModel>() {
+
+    override val viewModel: GenerateNumViewModel by viewModels()
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentGenerateNumBinding = FragmentGenerateNumBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

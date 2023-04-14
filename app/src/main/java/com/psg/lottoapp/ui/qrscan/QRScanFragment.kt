@@ -1,23 +1,27 @@
-package com.psg.lottoapp.view.qrscan
+package com.psg.lottoapp.ui.qrscan
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.psg.lottoapp.R
 import com.psg.lottoapp.databinding.ActivityQrscanBinding
-import com.psg.lottoapp.util.AppLogger
-import com.psg.lottoapp.view.base.BaseActivity
-import dagger.hilt.android.AndroidEntryPoint
+import com.psg.lottoapp.databinding.FragmentQrscanBinding
+import com.psg.lottoapp.ui.base.BaseFragment
 
-@AndroidEntryPoint
-class QRScanActivity : BaseActivity<ActivityQrscanBinding,QRScanViewModel>(R.layout.activity_qrscan) {
-    override val TAG: String = QRScanActivity::class.java.simpleName
+class QRScanFragment : BaseFragment<FragmentQrscanBinding, QRScanViewModel>() {
     override val viewModel: QRScanViewModel by viewModels()
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentQrscanBinding = FragmentQrscanBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

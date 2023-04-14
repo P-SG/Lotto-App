@@ -1,5 +1,7 @@
 package com.psg.data.model.remote
 
+import com.psg.domain.model.Lotto
+
 
 data class LottoResponse(
     val returnValue: String, // 요청결과
@@ -16,16 +18,16 @@ data class LottoResponse(
     val drwtNo6: Int,
     val bnusNo: Int,
     val drwNo: Int
-) {
+)
 
-//     fun numColor(num:Int) =
-//        when(num){
-//            in 0..10 -> R.color.num1
-//            in 11..20 -> R.color.num2
-//            in 21..30 -> R.color.num3
-//            in 31..40 -> R.color.num4
-//            in 41..45 -> R.color.num5
-//            else -> R.color.black
-//        }
-
-}
+fun LottoResponse.toDomain(): Lotto = Lotto(
+    drwNoDate,
+    drwtNo1,
+    drwtNo2,
+    drwtNo3,
+    drwtNo4,
+    drwtNo5,
+    drwtNo6,
+    bnusNo,
+    drwNo
+)

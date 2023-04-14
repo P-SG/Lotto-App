@@ -2,9 +2,15 @@ package com.psg.domain.usecase
 
 import com.psg.domain.model.LottoDate
 import com.psg.domain.repository.AppRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 
-class UpdateLottoUseCase(private val repository: AppRepository) {
-    suspend operator fun invoke(lotto: LottoDate){
-        repository.updateLotto(lotto)
+class UpdateLottoUseCase(
+    private val repository: AppRepository,
+    coroutineDispatcher: CoroutineDispatcher
+) : BaseUseCase<LottoDate, Unit>(coroutineDispatcher) {
+    override fun execute(parameter: LottoDate): Flow<Result<Unit>> {
+        return repository.updateLotto(parameter)
     }
+
 }

@@ -1,30 +1,31 @@
-package com.psg.lottoapp.view.main
+package com.psg.lottoapp.ui.main
 
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.activity.viewModels
-import com.psg.lottoapp.R
-import com.psg.data.model.local.LottoEntity
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.psg.domain.model.LottoDate
+import com.psg.lottoapp.R
 import com.psg.lottoapp.databinding.ActivityMainBinding
-import com.psg.lottoapp.util.AppLogger
-import com.psg.lottoapp.view.base.BaseActivity
-import com.psg.lottoapp.view.generate.GeneNumActivity
-import com.psg.lottoapp.view.qrscan.QRScanActivity
-import dagger.hilt.android.AndroidEntryPoint
+import com.psg.lottoapp.databinding.FragmentLottoBinding
+import com.psg.lottoapp.ui.base.BaseFragment
+import com.psg.lottoapp.ui.generate.GenerateNumFragment
+import com.psg.lottoapp.ui.qrscan.QRScanFragment
 
-@AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.activity_main) {
-    override val TAG: String = MainActivity::class.java.simpleName
-    override val viewModel: MainViewModel by viewModels()
+class LottoFragment : BaseFragment<FragmentLottoBinding, LottoViewModel>() {
+    override val viewModel: LottoViewModel by viewModels()
+    override fun getFragmentBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentLottoBinding = FragmentLottoBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
-        binding.lifecycleOwner = this
 
     }
 
@@ -88,12 +89,12 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainViewModel>(R.layout.ac
 
 
         binding.btnQrScan.setOnClickListener {
-            val intent = Intent(this,QRScanActivity::class.java)
+            val intent = Intent(this,QRScanFragment::class.java)
             startActivity(intent)
         }
 
         binding.btnGenerateNum.setOnClickListener {
-            val intent = Intent(this,GeneNumActivity::class.java)
+            val intent = Intent(this,GenerateNumFragment::class.java)
             startActivity(intent)
         }
 

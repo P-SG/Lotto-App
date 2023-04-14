@@ -1,7 +1,8 @@
 package com.psg.data.repository
 
-import com.psg.data.mapper.domainToEntity
-import com.psg.data.mapper.responseToDomain
+import com.psg.data.mapper.toEntity
+import com.psg.data.model.local.toDomain
+import com.psg.data.model.remote.toDomain
 import com.psg.data.repository.local.LocalDataSource
 import com.psg.data.repository.remote.RemoteDataSource
 import com.psg.domain.model.Lotto
@@ -9,34 +10,38 @@ import com.psg.domain.model.LottoDate
 import com.psg.domain.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class AppRepositoryImpl @Inject constructor(
+class AppRepositoryImpl constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
     ):AppRepository {
 
-    override suspend fun getRemoteLotto(drwNum: Int): Flow<Lotto> = flow {
+    override fun getRemoteLotto(drwNum: Int): Flow<Result<Lotto>> = flow {
         val response = remoteDataSource.searchLotto(drwNum)
-        if (response.isSuccessful){
-            emit(responseToDomain(response.body()!!))
-        }
+        val lotto = requireNotNull(response.body()) {
+            emit(Result.failure(Exception("Lottery API Error")))
+        }.toDomain()
+        emit(Result.success(lotto))
     }
 
-    override suspend fun getLocalLotto(): Flow<LottoDate> {
-        TODO("Not yet implemented")
+    override fun getLocalLotto(): Flow<Result<LottoDate>> = flow {
+        val lotto = localDataSource.getLottoNum().toDomain()
+        emit(Result.success(lotto))
     }
 
-    override suspend fun insertLotto(lotto: LottoDate) {
-        localDataSource.insertLotto(domainToEntity(lotto))
+    override fun insertLotto(lotto: LottoDate): Flow<Result<Unit>> = flow {
+        localDataSource.insertLotto(lotto.toEntity())
+        emit(Result.success(Unit))
     }
 
-    override suspend fun updateLotto(lotto: LottoDate) {
-        localDataSource.updateLotto(domainToEntity(lotto))
+    override fun updateLotto(lotto: LottoDate): Flow<Result<Unit>> = flow {
+        localDataSource.updateLotto(lotto.toEntity())
+        emit(Result.success(Unit))
     }
 
-    override suspend fun deleteLotto() {
+    override fun deleteLotto(): Flow<Result<Unit>> = flow {
         localDataSource.deleteLotto()
+        emit(Result.success(Unit))
     }
 
 

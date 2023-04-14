@@ -1,4 +1,4 @@
-rootProject.name = "Lotto App"
+rootProject.name = "lotto-app"
 include ':app'
 include ':data'
 include ':domain'
