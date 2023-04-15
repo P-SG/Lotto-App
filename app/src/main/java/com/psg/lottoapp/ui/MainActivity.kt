@@ -26,7 +26,7 @@ class MainActivity: AppCompatActivity() {
         val navController = navHostFragment.navController
 
         splashScreen.setKeepOnScreenCondition {
-
+            viewModel.appStateFlow.value is AppState.Success
         }
 
     }
