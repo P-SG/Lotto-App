@@ -5,12 +5,11 @@ import com.psg.domain.repository.AppRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 
-class UpdateLottoUseCase(
+class GetLottoUseCase(
     private val repository: AppRepository,
     coroutineDispatcher: CoroutineDispatcher
-) : BaseUseCase<Lotto, Unit>(coroutineDispatcher) {
-    override fun execute(parameter: Lotto): Flow<Result<Unit>> {
-        return repository.updateLotto(parameter)
+    ): BaseUseCase<Int?, Lotto>(coroutineDispatcher) {
+    override fun execute(parameter: Int?): Flow<Result<Lotto>> {
+        return repository.getLotto(parameter)
     }
-
 }

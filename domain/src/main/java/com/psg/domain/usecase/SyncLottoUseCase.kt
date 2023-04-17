@@ -5,11 +5,11 @@ import com.psg.domain.repository.AppRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 
-class GetRemoteLottoUseCase(
+class SyncLottoUseCase(
     private val repository: AppRepository,
     coroutineDispatcher: CoroutineDispatcher
-    ): BaseUseCase<Int, Lotto>(coroutineDispatcher) {
-    override fun execute(parameter: Int): Flow<Result<Lotto>> {
-        return repository.getRemoteLotto(parameter)
+): BaseUseCase<Unit, Lotto>(coroutineDispatcher) {
+    override fun execute(parameter: Unit): Flow<Result<Lotto>> {
+        return repository.syncLotto()
     }
 }

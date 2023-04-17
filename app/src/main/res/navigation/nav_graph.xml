@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/lottoFragment">
 
+    <fragment
+        android:id="@+id/lottoFragment"
+        android:name="com.psg.lottoapp.ui.main.LottoFragment"
+        android:label="fragment_lotto"
+        tools:layout="@layout/fragment_lotto" >
+        <action
+            android:id="@+id/action_lottoFragment_to_QRScanFragment"
+            app:destination="@id/QRScanFragment" />
+        <action
+            android:id="@+id/action_lottoFragment_to_generateNumFragment"
+            app:destination="@id/generateNumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/QRScanFragment"
+        android:name="com.psg.lottoapp.ui.qrscan.QRScanFragment"
+        android:label="fragment_qrscan"
+        tools:layout="@layout/fragment_qrscan" />
+    <fragment
+        android:id="@+id/generateNumFragment"
+        android:name="com.psg.lottoapp.ui.generate.GenerateNumFragment"
+        android:label="fragment_generate_num"
+        tools:layout="@layout/fragment_generate_num" />
 </navigation>

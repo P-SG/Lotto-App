@@ -27,7 +27,7 @@ val localDataModule = module {
         get<AppDatabase>().LottoDao()
     }
 
-    factory<LocalDataSource> {
+    single<LocalDataSource> {
         LocalDataSourceImpl(dao = get())
     }
 }
@@ -44,7 +44,7 @@ val remoteDataModule = module {
         get<Retrofit>().create(LottoAPI::class.java)
     }
 
-    factory<RemoteDataSource> {
+    single<RemoteDataSource> {
         RemoteDataSourceImpl(api = get())
     }
 }

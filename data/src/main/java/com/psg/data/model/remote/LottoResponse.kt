@@ -1,5 +1,6 @@
 package com.psg.data.model.remote
 
+import com.psg.data.model.local.LottoEntity
 import com.psg.domain.model.Lotto
 
 
@@ -31,3 +32,10 @@ fun LottoResponse.toDomain(): Lotto = Lotto(
     bnusNo,
     drwNo
 )
+
+fun LottoResponse?.toEntity(): LottoEntity = this?.let {
+    LottoEntity(
+        drwNo,
+        drwNoDate
+    )
+} ?: throw Exception("LottoResponse is null")

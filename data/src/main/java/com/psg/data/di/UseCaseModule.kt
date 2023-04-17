@@ -11,13 +11,13 @@ val useCaseModule = module {
         Dispatchers.IO
     }
     factory {
-        GetLocalLottoUseCase(
+        SyncLottoUseCase(
             repository = get(),
             coroutineDispatcher = get(named("ioDispatcher"))
         )
     }
     factory {
-        GetRemoteLottoUseCase(
+        GetLottoUseCase(
             repository = get(),
             coroutineDispatcher = get(named("ioDispatcher"))
         )

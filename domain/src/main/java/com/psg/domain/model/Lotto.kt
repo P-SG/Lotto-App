@@ -11,7 +11,4 @@ data class Lotto(
     val drwtNo6: Int,
     val bnusNo: Int,
     val drwNo: Int
-){
-
-    fun getNum(num:Int) = num.toString()
-}
+)

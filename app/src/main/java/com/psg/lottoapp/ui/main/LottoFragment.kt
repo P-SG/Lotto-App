@@ -1,107 +1,94 @@
 package com.psg.lottoapp.ui.main
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.psg.domain.model.LottoDate
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.psg.lottoapp.R
-import com.psg.lottoapp.databinding.ActivityMainBinding
 import com.psg.lottoapp.databinding.FragmentLottoBinding
 import com.psg.lottoapp.ui.base.BaseFragment
-import com.psg.lottoapp.ui.generate.GenerateNumFragment
-import com.psg.lottoapp.ui.qrscan.QRScanFragment
+import com.psg.lottoapp.utils.toColor
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LottoFragment : BaseFragment<FragmentLottoBinding, LottoViewModel>() {
-    override val viewModel: LottoViewModel by viewModels()
+class LottoFragment : BaseFragment<FragmentLottoBinding>() {
+    private val viewModel: LottoViewModel by viewModel()
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentLottoBinding = FragmentLottoBinding.inflate(inflater, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
-
-    }
-
-    private fun checkOverTime(num: Int){
-        val b = intent.getBooleanExtra("overTime",false)
-        AppLogger.println("b체크 $b")
-        if (b) viewModel.getRemoteLotto(num+1) else viewModel.getRemoteLotto(num)
     }
 
     private fun initView(){
-        viewModel.getLocalLotto()
-
-        binding.etLottoNum.addTextChangedListener(textWatcher)
-
-        viewModel.lottoDate.observe(this) {
-            if (it != null) { // DB에 저장된 로또회차가 있을 때
-                binding.etLottoNum.setText(it.drwNo.toString())
-                binding.tvLottoNum.text = "회차 당첨번호 ${it.drwNoDate.replace("-", ".")}"
-                viewModel.getRemoteLotto(it.drwNo)
-//                checkOverTime(it.drwNo)
-                viewModel.lottoNum.observe(this) { num ->
-                    if (num != null) {
-                        binding.item = num
-                        binding.tvLottoNum1.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.drwtNo1)))
-                        binding.tvLottoNum2.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.drwtNo2)))
-                        binding.tvLottoNum3.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.drwtNo3)))
-                        binding.tvLottoNum4.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.drwtNo4)))
-                        binding.tvLottoNum5.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.drwtNo5)))
-                        binding.tvLottoNum6.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.drwtNo6)))
-                        binding.tvLottoBns.backgroundTintList =
-                            ColorStateList.valueOf(resources.getColor(viewModel.parseColor(num.bnusNo)))
-
-                    }
-                }
-            } else { // DB에 저장된 로또회차가 없을 때
-                AppLogger.println("로또번호가 null")
-                binding.etLottoNum.setText("1001")
-                binding.tvLottoNum.text = "회차 당첨번호 2022.02.05"
-                viewModel.getRemoteLotto(1001)
-                viewModel.lottoNum.observe(this) { num ->
-                    if (num != null) { // 검색한 로또회차가 있을 때
-                        AppLogger.println("INSERT 호출")
-                        viewModel.insertLotto(
-                            LottoDate(
-                                num.drwNo,
-                                num.drwNoDate
-                            )
-                        )
-                    } else { // 검색한 로또회차가 없을 때
-                        AppLogger.println("api가 null")
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect {
+                    when (it) {
+                        is LottoState.Loading -> {}
+                        is LottoState.Error -> {}
+                        is LottoState.Success -> {
+                            with (binding) {
+                                tvLottoNum1.run {
+                                    text = it.data?.drwtNo1.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.drwtNo1.toColor()))
+                                }
+                                tvLottoNum2.run {
+                                    text = it.data?.drwtNo2.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.drwtNo2.toColor()))
+                                }
+                                tvLottoNum3.run {
+                                    text = it.data?.drwtNo3.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.drwtNo3.toColor()))
+                                }
+                                tvLottoNum4.run {
+                                    text = it.data?.drwtNo4.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.drwtNo4.toColor()))
+                                }
+                                tvLottoNum5.run {
+                                    text = it.data?.drwtNo5.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.drwtNo5.toColor()))
+                                }
+                                tvLottoNum6.run {
+                                    text = it.data?.drwtNo6.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.drwtNo6.toColor()))
+                                }
+                                tvLottoBns.run {
+                                    text = it.data?.bnusNo.toString()
+                                    backgroundTintList = ColorStateList.valueOf(resources.getColor(it.data?.bnusNo.toColor()))
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
 
+        binding.etLottoNum.addTextChangedListener(textWatcher)
 
         binding.btnQrScan.setOnClickListener {
-            val intent = Intent(this,QRScanFragment::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_lottoFragment_to_QRScanFragment)
         }
 
         binding.btnGenerateNum.setOnClickListener {
-            val intent = Intent(this,GenerateNumFragment::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_lottoFragment_to_generateNumFragment)
         }
 
     }
 
 
-    private val textWatcher = object : TextWatcher{
+    private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
         }
 
@@ -110,11 +97,9 @@ class LottoFragment : BaseFragment<FragmentLottoBinding, LottoViewModel>() {
 
         override fun afterTextChanged(s: Editable?) {
             if (s!!.length > 1){
-                viewModel.getRemoteLotto(s.toString().toInt())
+                viewModel.getLotto(s.toString().toInt())
             }
         }
-
     }
-
 
 }
